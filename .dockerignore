@@ -1,0 +1,11 @@
+.*
+__pycache__
+docker-compose.yml
+docs
+LICENSE
+mkdocs.yml
+README.md
+swagger.yml
+test*
+utdapi
+*.md
