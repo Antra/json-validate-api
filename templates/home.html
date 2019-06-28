@@ -12,9 +12,25 @@
 		Welcome to the JSON Schema Validation API
 	</h2>
 	<h3>
+		Available endpoints
+	</h3>
+	<div class="endpoints">
+	<ol style="list-style: none;">
+		{% for item in endpoints %}
+		<li> {{ item }}</li>
+		{% endfor %}
+	</ol>
+	</div>
+	<h3>
 		Usage
 	</h3>
-		some stuff will go here later on... 
+	<div class="usage">
+	Call one of the available endpoints with your payload.
+	<ul style="list-style: none;">	
+		<li>If the content is <b>valid</b> according to the schema, you will receive a <b>200/OK</b> together with your payload</li>
+		<li>If the content is <b>invalid</b> according to the schema, you will receive a <b>400/Bad Request</b> together with the validation errors</li>
+		</ul>
+	</div>
 	<h2>
 		Data store
 	</h2>
