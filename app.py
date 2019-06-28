@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template, abort, make_response
 import datetime as dt
 import json
-# from jsonschema import validate
+from jsonschema import validate
 
 # Read the data files to create a basic data store
 with open('data/suppliers.json', 'r') as f:
