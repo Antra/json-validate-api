@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>JSON Schema Validation API</title>
+	<meta charset="UTF-8">
+	<title>JSON Schema Validation API</title>
 </head>
+
 <body>
-    <h1>
-        Hello World!
-    </h1>
+	<h1>
+		Hello World!
+	</h1>
 	<h2>
 		Welcome to the JSON Schema Validation API
 	</h2>
@@ -15,26 +17,28 @@
 		Available endpoints
 	</h3>
 	<div class="endpoints">
-	<ol style="list-style: none;">
-		{% for item in endpoints %}
-		<li> {{ item }}</li>
-		{% endfor %}
-	</ol>
+		<ul style="list-style: bullet;">
+			{% for item in endpoints %}
+			<li> {{ item }}</li>
+			{% endfor %}
+		</ul>
 	</div>
 	<h3>
 		Usage
 	</h3>
 	<div class="usage">
-	Call one of the available endpoints with your payload.
-	<ul style="list-style: none;">	
-		<li>If the content is <b>valid</b> according to the schema, you will receive a <b>200/OK</b> together with your payload</li>
-		<li>If the content is <b>invalid</b> according to the schema, you will receive a <b>400/Bad Request</b> together with the validation errors</li>
+		Call one of the available endpoints with your payload.
+		<ul style="list-style: none;">
+			<li>If the content is <b>valid</b> according to the schema, you will receive a <b>200/OK</b> together with
+				your payload</li>
+			<li>If the content is <b>invalid</b> according to the schema, you will receive a <b>400/Bad Request</b>
+				together with the validation errors</li>
 		</ul>
 	</div>
 	<h2>
 		Data store
 	</h2>
-		This is a listing of the data currently stored (hit refresh if you just uploaded more data).
+	This is a listing of the data currently stored (hit refresh if you just uploaded more data).
 	<h3>
 		Suppliers
 	</h3>
@@ -48,4 +52,5 @@
 		<pre>{{ otherdata }}</pre>
 	</div>
 </body>
+
 </html>

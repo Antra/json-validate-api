@@ -12,7 +12,7 @@ with open('data/suppliers.json', 'r') as f:
 
 
 # Load the schemas - and make a list of them for the html page
-schemaList = ['suppliers', 'test', 'test2', 'otherStuff']
+schemaList = ['suppliers']
 with open('schema/supplier.json', 'r') as f:
     supplierSchema = json.load(f)
 
