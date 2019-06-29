@@ -1,21 +1,24 @@
 import pprint
 from flask import Flask, jsonify, request, render_template, abort, make_response
-import datetime as dt
+#import datetime as dt
 import json
 # import jsonschema
 from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaError, validate
 
-
+# Start getting the needed stuff in place
 # Read the data files to create a basic data store
 with open('data/suppliers.json', 'r') as f:
     suppliers = json.load(f)
-
-
-# Load the schemas
+# Load the schemas - must be named <endpoint> + 'Schema'
 with open('schema/supplier.json', 'r') as f:
     supplierSchema = json.load(f)
+with open('schema/test.json', 'r') as f:
+    testSchema = json.load(f)
+with open('schema/test2.json', 'r') as f:
+    test2Schema = json.load(f)
 
 
+# Then make the helper functions
 # pretty-print JSON, so it looks nice on HTML pages.
 def make_pretty_json(string):
     """
@@ -48,6 +51,17 @@ def get_http_code(errorCount):
         return 500
 
 
+# get the appropriate schema
+def get_schema(endpoint):
+    """
+    This function takes the name of an endpoint and
+    returns the schema that belongs to it
+
+    :return:        JSON schema
+    """
+    return eval(endpoint.lstrip('/') + 'Schema')
+
+
 # generic validation function
 def schema_validate(data, schema):
     """
@@ -57,7 +71,6 @@ def schema_validate(data, schema):
     :return:        JSON object and 0 errors, if validation passes
                     List of errors and error count, if validation fails
     """
-
     validationErrors = ""
     errorCount = 0
     try:
@@ -79,26 +92,6 @@ def schema_validate(data, schema):
         validationErrors = data
 
     return errorCount, validationErrors
-
-
-# generic function for getting data
-def get_data(datastore, id="", idtype=""):
-    """
-    This function takes a datastore and returns
-    either the indicated entry or the full datastore
-
-    :return:        specific data entry (when id and idtype are given)
-    :return:        the full datastore (when id and/or idtype are not given)
-    """
-    # if id and idtype are present, then we return that entry from the datastore
-    if len(str(id)) > 0 and len(str(idtype)) > 0:
-        item = [item for item in datastore['data'] if item[idtype] == id]
-        if len(item) == 0:
-            abort(404)
-        return(item[0])
-    # otherwise we return the full datastore
-    else:
-        return(datastore)
 
 
 # Create the application instance
@@ -123,8 +116,6 @@ def index():
 
     :return:        the rendered template 'home.html'
     """
-    supplierdata = make_pretty_json(suppliers)
-
     # Build a list of the available endpoints
     endpoints = []
     for rule in app.url_map.iter_rules():
@@ -132,6 +123,7 @@ def index():
         if rule.rule not in ('/', '/static/<path:filename>'):
             endpoints.append(rule.rule)
     endpoints = sorted(endpoints)
+    supplierdata = make_pretty_json(suppliers)
     otherdata = make_pretty_json("")
     # return render_template('home.html', supplierdata = json.dumps(suppliers, sort_keys = False, indent = 4, separators = (',', ': ')))
     return render_template('home.html', **locals())
@@ -141,56 +133,55 @@ def index():
 @app.route('/supplier', methods=['POST'])
 def handle_supplier():
     """
-    This function just responds to the browser URL
-    localhost:80/api/supplier/<supplier_id>
+    This function responds and validates POST calls against
+    /<endpoint>
 
     :return:        201, if the resources passed validation
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
-    # Do we have a request with an id and name?
-    # if not request.json or not 'name' in request.json or not 'externalCode' in request.json or len(str(request.json['externalCode'])) == 0:
-    #   abort(400)
+    # validate the payload against the relevant schema, returns errorCount together with a validation message
+    errorCount, returnMessage = schema_validate(
+        request.json, get_schema(request.url_rule.rule))
+    # get the corresponding HTTP response code based on the number of errors
+    responseCode = get_http_code(errorCount)
+    # generate the response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
-    # Do we have a valid request?
-    # This works!
-    # try:
-    #    jsonschema.validate(request.json, supplierSchema)
-    #    print('schema validation ok!')
-    #    return jsonify(request.json), 201
-    # except jsonschema.ValidationError as e:
-    #    print(e.message)
-    #    return ('validation_error:' + e.message), 400
-    # except jsonschema.SchemaError as e:
-    #    print(e)
-    #    return ('schema_error:' + e), 500
 
-    # validationErrors = ""
-    # errorCount = 0
-    # try:
-    #     v = Draft7Validator(supplierSchema)
-    #     errors = sorted(v.iter_errors(request.json), key=lambda e: e.path)
-    #     for error in errors:
-    #         errorCount += 1
-    #         validationErrors = validationErrors + str(error.message) + ', '
-    # except SchemaError as e:
-    #     print(e)
-    #     return ('schema_error:' + e), 500
+# test
+@app.route('/test', methods=['POST'])
+def handle_test():
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
 
-    # if errorCount == 0:
-    #     print('schema validation ok!')
-    #     return jsonify(request.json), 200
-    # else:
-    #     validationErrors = validationErrors.rstrip(', ')
-    #     print('validation error! There were ' +
-    #           str(errorCount) + ' errors!\n' + validationErrors)
-    #     return jsonify({'validation_error': errorCount, 'validation_errors': validationErrors}), 400
-    # return (str(errorCount) + ' validation errors!\n' + validationErrors), 400
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # validate the payload against the relevant schema, returns errorCount together with a validation message
+    errorCount, returnMessage = schema_validate(
+        request.json, get_schema(request.url_rule.rule))
+    # get the corresponding HTTP response code based on the number of errors
+    responseCode = get_http_code(errorCount)
+    # generate the response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
-    # get the schema for this endpoint
-    schema = eval(request.url_rule.rule.lstrip('/') + 'Schema')
-    # validate the payload against the schema, returns errorCount together with a validation message
-    errorCount, returnMessage = schema_validate(request.json, schema)
+
+@app.route('/test2', methods=['POST'])
+def handle_test2():
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
+
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # validate the payload against the relevant schema, returns errorCount together with a validation message
+    errorCount, returnMessage = schema_validate(
+        request.json, get_schema(request.url_rule.rule))
     # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
     # generate the response - if errorCount = 0, the returnMessage contains the original request payload
