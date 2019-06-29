@@ -30,6 +30,57 @@ def make_pretty_json(string):
         return json.dumps(string, sort_keys=False, indent=4, separators=(',', ': '))
 
 
+# get http code
+def get_http_code(errorCount):
+    """
+    This function takes an integer and returns an integer
+    to use as HTTP response code
+
+    :return:        200, if errorCount = 0
+                    400, if errorCount > 0
+                    500, if errorCount < 0
+    """
+    if errorCount > 0:
+        return 400
+    elif errorCount == 0:
+        return 200
+    else:
+        return 500
+
+
+# generic validation function
+def schema_validate(data, schema):
+    """
+    This function takes a JSON object and a schema reference
+    and returns the validation result
+
+    :return:        JSON object and 0 errors, if validation passes
+                    List of errors and error count, if validation fails
+    """
+
+    validationErrors = ""
+    errorCount = 0
+    try:
+        v = Draft7Validator(schema)
+        errors = sorted(v.iter_errors(data), key=lambda e: e.path)
+        for error in errors:
+            errorCount += 1
+            validationErrors = validationErrors + str(error.message) + ', '
+    except SchemaError as e:
+        errorCount = -1
+        print(e)
+        return errorCount, e
+
+    if errorCount > 0:
+        validationErrors = validationErrors.rstrip(', ')
+        print('validation error! There were ' +
+              str(errorCount) + ' errors!\n' + validationErrors)
+    elif errorCount == 0:
+        validationErrors = data
+
+    return errorCount, validationErrors
+
+
 # generic function for getting data
 def get_data(datastore, id="", idtype=""):
     """
@@ -114,27 +165,36 @@ def handle_supplier():
     #    print(e)
     #    return ('schema_error:' + e), 500
 
-    validationErrors = ""
-    errorCount = 0
-    try:
-        v = Draft7Validator(supplierSchema)
-        errors = sorted(v.iter_errors(request.json), key=lambda e: e.path)
-        for error in errors:
-            errorCount += 1
-            validationErrors = validationErrors + str(error.message) + ', '
-    except SchemaError as e:
-        print(e)
-        return ('schema_error:' + e), 500
+    # validationErrors = ""
+    # errorCount = 0
+    # try:
+    #     v = Draft7Validator(supplierSchema)
+    #     errors = sorted(v.iter_errors(request.json), key=lambda e: e.path)
+    #     for error in errors:
+    #         errorCount += 1
+    #         validationErrors = validationErrors + str(error.message) + ', '
+    # except SchemaError as e:
+    #     print(e)
+    #     return ('schema_error:' + e), 500
 
-    if errorCount == 0:
-        print('schema validation ok!')
-        return jsonify(request.json), 200
-    else:
-        validationErrors = validationErrors.rstrip(', ')
-        print('validation error! There were ' +
-              str(errorCount) + ' errors!\n' + validationErrors)
-        return jsonify({'validation_error': errorCount, 'validation_errors': validationErrors}), 400
-        # return (str(errorCount) + ' validation errors!\n' + validationErrors), 400
+    # if errorCount == 0:
+    #     print('schema validation ok!')
+    #     return jsonify(request.json), 200
+    # else:
+    #     validationErrors = validationErrors.rstrip(', ')
+    #     print('validation error! There were ' +
+    #           str(errorCount) + ' errors!\n' + validationErrors)
+    #     return jsonify({'validation_error': errorCount, 'validation_errors': validationErrors}), 400
+    # return (str(errorCount) + ' validation errors!\n' + validationErrors), 400
+
+    # get the schema for this endpoint
+    schema = eval(request.url_rule.rule.lstrip('/') + 'Schema')
+    # validate the payload against the schema, returns errorCount together with a validation message
+    errorCount, returnMessage = schema_validate(request.json, schema)
+    # get the corresponding HTTP response code based on the number of errors
+    responseCode = get_http_code(errorCount)
+    # generate the response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
 if __name__ == '__main__':
