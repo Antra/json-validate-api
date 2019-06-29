@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, request, render_template, abort, make_response
+import pprint
+from flask import Flask, jsonify, request, render_template, abort, make_response, url_for
+import app
 import datetime as dt
 import json
 # import jsonschema
@@ -11,8 +13,7 @@ with open('data/suppliers.json', 'r') as f:
     suppliers = json.load(f)
 
 
-# Load the schemas - and make a list of them for the html page
-schemaList = ['suppliers']
+# Load the schemas
 with open('schema/supplier.json', 'r') as f:
     supplierSchema = json.load(f)
 
@@ -74,7 +75,14 @@ def index():
     :return:        the rendered template 'home.html'
     """
     supplierdata = make_pretty_json(suppliers)
-    endpoints = sorted(schemaList)
+
+    # Build a list of the available endpoints
+    endpoints = []
+    for rule in app.url_map.iter_rules():
+        # except that we don't want to show root and /static
+        if rule.rule not in ('/', '/static/<path:filename>'):
+            endpoints.append(rule.rule)
+    endpoints = sorted(endpoints)
     otherdata = make_pretty_json("")
     # return render_template('home.html', supplierdata = json.dumps(suppliers, sort_keys = False, indent = 4, separators = (',', ': ')))
     return render_template('home.html', **locals())
