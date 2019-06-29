@@ -1,11 +1,9 @@
 import pprint
-from flask import Flask, jsonify, request, render_template, abort, make_response, url_for
-import app
+from flask import Flask, jsonify, request, render_template, abort, make_response
 import datetime as dt
 import json
 # import jsonschema
 from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaError, validate
-from os.path import join, dirname
 
 
 # Read the data files to create a basic data store
