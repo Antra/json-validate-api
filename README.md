@@ -30,9 +30,8 @@ python app.py
 ### Data files
 The data files used are:
 ```
-/data - imported by the API and accessible via the API calls
+/data - example data of
 /schema - imported by the API and used to validate the API calls
-/.data-input - reference data files, holds easily-readable versions of the data
 /templates - basic html templates
 ```
 
