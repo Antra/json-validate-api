@@ -1,0 +1,23 @@
+{
+    "loginAccount": "string",
+    "rowApproveIterationCount": 0,
+    "permissionCode1": "string",
+    "permissionCode2": "string",
+    "permissionCode3": "string",
+    "permissionCode4": "string",
+    "permissionCode5": "string",
+    "permissionCode6": "string",
+    "permissionCode7": "string",
+    "limit": 0,
+    "priorityIndex": 0,
+    "module": "string",
+    "excludedValue": "string",
+    "companies": [
+        {
+            "companyCode": "string",
+            "active": true
+        }
+    ],
+    "externalCode": "4847-31231212-212121-1212",
+    "lastUpdated": "2019-07-02T10:34:28.381Z"
+}
