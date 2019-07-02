@@ -65,7 +65,7 @@ def get_http_code(errorCount):
 
 
 # generic validation function
-def schema_validate(data, location):
+def schema_validate(data, endpoint):
     """
     This function takes a JSON object and a schema reference
     and returns the validation result
@@ -73,10 +73,11 @@ def schema_validate(data, location):
     :return:        JSON object and 0 errors, if validation passes
                     List of errors and error count, if validation fails
     """
+    schemaLocation = endpointList[endpoint]
     validationErrors = ""
     errorCount = 0
     try:
-        v = Draft7Validator(schema['definitions'][location])
+        v = Draft7Validator(schema['definitions'][schemaLocation])
         errors = sorted(v.iter_errors(data), key=lambda e: e.path)
         for error in errors:
             errorCount += 1
@@ -143,10 +144,10 @@ def handle_supplier():
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
-    schemaLocation = "VendorEntity"
+    endpoint = request.url_rule.rule.lstrip('/')
     # validate the payload against the relevant schema, returns errorCount together with a validation message
     errorCount, returnMessage = schema_validate(
-        request.json, schemaLocation)
+        request.json, endpoint)
     # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
     # generate the response - if errorCount = 0, the returnMessage contains the original request payload
@@ -164,10 +165,10 @@ def handle_account():
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
-    schemaLocation = "AccountEntity"
+    endpoint = request.url_rule.rule.lstrip('/')
     # validate the payload against the relevant schema, returns errorCount together with a validation message
     errorCount, returnMessage = schema_validate(
-        request.json, schemaLocation)
+        request.json, endpoint)
     # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
     # generate the response - if errorCount = 0, the returnMessage contains the original request payload
