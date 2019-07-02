@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request, render_template, abort, make_response
 import json
 # import jsonschema
 from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaError, validate
+import jsonref
 
 # Start getting the needed stuff in place
 # Read the data files to create a basic data store
@@ -11,11 +12,14 @@ with open('data/suppliers.json', 'r') as f:
     suppliers = json.load(f)
 with open('data/accounts.json', 'r') as f:
     accounts = json.load(f)
-# Load the schemas - must be named <endpoint> + 'Schema'
-with open('schema/supplier.json', 'r') as f:
-    supplierSchema = json.load(f)
-with open('schema/account.json', 'r') as f:
-    accountSchema = json.load(f)
+
+# Full schema
+# Some preparation work is needed, first generate the full schema from swagger with openapi2jsonschema:
+#  openapi2jsonschema file:swagger.json --prefix=""
+# then load this schema using jsonref to resolve the "$ref"-references
+# lastly, make sure to reference the correct part of the schema in the individual endpoints, e.g. Draft7Validator(schema['definitions']['AccountEntity'])
+with open('schema/schema.json', 'r') as f:
+    schema = jsonref.load(f)
 
 
 # Then make the helper functions
@@ -51,19 +55,8 @@ def get_http_code(errorCount):
         return 500
 
 
-# get the appropriate schema
-def get_schema(endpoint):
-    """
-    This function takes the name of an endpoint and
-    returns the schema that belongs to it
-
-    :return:        JSON schema
-    """
-    return eval(endpoint.lstrip('/') + 'Schema')
-
-
 # generic validation function
-def schema_validate(data, schema):
+def schema_validate(data, location):
     """
     This function takes a JSON object and a schema reference
     and returns the validation result
@@ -74,7 +67,7 @@ def schema_validate(data, schema):
     validationErrors = ""
     errorCount = 0
     try:
-        v = Draft7Validator(schema)
+        v = Draft7Validator(schema['definitions'][location])
         errors = sorted(v.iter_errors(data), key=lambda e: e.path)
         for error in errors:
             errorCount += 1
@@ -140,9 +133,10 @@ def handle_supplier():
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
+    schemaLocation = "VendorEntity"
     # validate the payload against the relevant schema, returns errorCount together with a validation message
     errorCount, returnMessage = schema_validate(
-        request.json, get_schema(request.url_rule.rule))
+        request.json, schemaLocation)
     # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
     # generate the response - if errorCount = 0, the returnMessage contains the original request payload
@@ -160,9 +154,10 @@ def handle_account():
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
+    schemaLocation = "AccountEntity"
     # validate the payload against the relevant schema, returns errorCount together with a validation message
     errorCount, returnMessage = schema_validate(
-        request.json, get_schema(request.url_rule.rule))
+        request.json, schemaLocation)
     # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
     # generate the response - if errorCount = 0, the returnMessage contains the original request payload
