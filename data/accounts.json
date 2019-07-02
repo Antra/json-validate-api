@@ -1,0 +1,33 @@
+{
+    "data": [
+        {
+            "accountCode": "10012",
+            "accountNames": [
+                {
+                    "translation": "Office supplies",
+                    "language": "en-US"
+                }
+            ],
+            "parents": [
+                {
+                    "parentType": "string",
+                    "parentCodes": [
+                        "string"
+                    ],
+                    "parents": [
+                        null
+                    ]
+                }
+            ],
+            "companies": [
+                {
+                    "companyCode": "string",
+                    "inherit": true,
+                    "active": true
+                }
+            ],
+            "externalCode": "4847-31231212-212121-1212",
+            "lastUpdated": "2019-06-30T05:14:58.015Z"
+        }
+    ]
+}

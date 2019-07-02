@@ -9,13 +9,13 @@ from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaEr
 # Read the data files to create a basic data store
 with open('data/suppliers.json', 'r') as f:
     suppliers = json.load(f)
+with open('data/accounts.json', 'r') as f:
+    accounts = json.load(f)
 # Load the schemas - must be named <endpoint> + 'Schema'
 with open('schema/supplier.json', 'r') as f:
     supplierSchema = json.load(f)
-with open('schema/test.json', 'r') as f:
-    testSchema = json.load(f)
-with open('schema/test2.json', 'r') as f:
-    test2Schema = json.load(f)
+with open('schema/account.json', 'r') as f:
+    accountSchema = json.load(f)
 
 
 # Then make the helper functions
@@ -149,28 +149,9 @@ def handle_supplier():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-# test
-@app.route('/test', methods=['POST'])
-def handle_test():
-    """
-    This function responds and validates POST calls against
-    /<endpoint>
-
-    :return:        201, if the resources passed validation
-                    400, if the resources fail validation
-                    500, if the schemas fail validation
-    """
-    # validate the payload against the relevant schema, returns errorCount together with a validation message
-    errorCount, returnMessage = schema_validate(
-        request.json, get_schema(request.url_rule.rule))
-    # get the corresponding HTTP response code based on the number of errors
-    responseCode = get_http_code(errorCount)
-    # generate the response - if errorCount = 0, the returnMessage contains the original request payload
-    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
-
-
-@app.route('/test2', methods=['POST'])
-def handle_test2():
+# Account
+@app.route('/account', methods=['POST'])
+def handle_account():
     """
     This function responds and validates POST calls against
     /<endpoint>

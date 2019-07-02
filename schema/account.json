@@ -1,0 +1,135 @@
+{
+  "required": [
+    "accountCode",
+    "accountNames",
+    "externalCode"
+  ],
+  "type": "object",
+  "properties": {
+    "accountCode": {
+      "description": "Defines a code for the account (used for invoice coding).",
+      "maxLength": 25,
+      "minLength": 1,
+      "type": "string",
+      "example": "10012"
+    },
+    "accountNames": {
+      "description": "Defines name(s) for the account (used for invoice coding). Please always include 'en-US' language tag for Basware global support, as well as any local-language tag being used. If both translations are not available, please use the same string with both language tags.",
+      "uniqueItems": false,
+      "type": "array",
+      "items": {
+        "$ref": "#/LanguageTranslationEntity"
+      }
+    },
+    "parents": {
+      "description": "Purchase Manager parent object structure. Needed if Purchase Manager is integrated through Basware API. Not used with P2P. Note that the child 'parents' -object inside the root 'parents' -object can contain multiple nested child elements.",
+      "uniqueItems": false,
+      "type": "array",
+      "items": {
+        "$ref": "#/ParentEntity"
+      }
+    },
+    "companies": {
+      "description": "List of company units to associate account to P2P organization hierarchy",
+      "uniqueItems": false,
+      "type": "array",
+      "items": {
+        "$ref": "#/AccountCompanyEntity"
+      }
+    },
+    "externalCode": {
+      "description": "External identifier that is used as a key in API",
+      "maxLength": 36,
+      "minLength": 1,
+      "type": "string",
+      "example": "4847-31231212-212121-1212"
+    },
+    "lastUpdated": {
+      "format": "date-time",
+      "description": "The timestamp of last modification",
+      "type": "string"
+    }
+  },
+  "LanguageTranslationEntity" :{
+
+  "required": [
+    "translation",
+    "language"
+  ],
+  "type": "object",
+  "properties": {
+    "translation": {
+      "maxLength": 2000,
+      "minLength": 2,
+      "type": "string",
+      "example": "Office supplies"
+    },
+    "language": {
+      "maxLength": 10,
+      "minLength": 2,
+      "type": "string",
+      "example": "en-US"
+    }
+  }
+},
+  "ParentEntity": 
+
+{
+  "required": [
+    "parentType",
+    "parentCodes"
+  ],
+  "type": ["object", "null"],
+  "properties": {
+    "parentType": {
+      "maxLength": 100,
+      "minLength": 1,
+      "type": "string",
+      "example": "Department"
+    },
+    "parentCodes": {
+      "uniqueItems": false,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parents": {
+      "uniqueItems": false,
+      "type": "array",
+      "items": {
+        "$ref": "#/ParentEntity"
+      }
+    }
+  }
+},"AccountCompanyEntity":
+{
+  "required": [
+    "companyCode",
+    "inherit",
+    "active"
+  ],
+  "type": "object",
+  "properties": {
+    "companyCode": {
+      "description": "Defines a company code that the account is mapped to",
+      "maxLength": 32,
+      "minLength": 2,
+      "type": "string",
+      "example": "BW01"
+    },
+    "inherit": {
+      "description": "The value specifies whether the property is inherited to lower organizations.",
+      "type": "boolean",
+      "example": false
+    },
+    "active": {
+      "description": "This flag will enable the data to be visible on UI, provided if the value is true, not visible in case of value is false. It will be also used for soft delete.",
+      "type": "boolean",
+      "example": true
+    }
+  }
+},
+  
+  "$schema": "http://json-schema.org/schema#"
+}
