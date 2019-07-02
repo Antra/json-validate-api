@@ -117,6 +117,7 @@ def index():
             endpoints.append(rule.rule)
     endpoints = sorted(endpoints)
     supplierdata = make_pretty_json(suppliers)
+    accountdata = make_pretty_json(accounts)
     otherdata = make_pretty_json("")
     # return render_template('home.html', supplierdata = json.dumps(suppliers, sort_keys = False, indent = 4, separators = (',', ': ')))
     return render_template('home.html', **locals())
