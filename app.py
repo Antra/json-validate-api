@@ -13,12 +13,15 @@ with open('data/suppliers.json', 'r') as f:
     suppliers = json.load(f)
 with open('data/accounts.json', 'r') as f:
     accounts = json.load(f)
+with open('data/advancedpermissions.json', 'r') as f:
+    advancedpermissions = json.load(f)
 
 
 # The let's make a dictionary of the endpoints and the corresponding schema locations
 endpointList = {
-    "account": "AccountEntity",
-    "supplier": "VendorEntity"
+    "accounts": "AccountEntity",
+    "suppliers": "VendorEntity",
+    "advancedpermissions": "AdvancedPermissionEntity"
 }
 
 
@@ -128,14 +131,14 @@ def index():
     endpoints = sorted(endpoints)
     supplierdata = make_pretty_json(suppliers)
     accountdata = make_pretty_json(accounts)
+    advancedpermissiondata = make_pretty_json(advancedpermissions)
     otherdata = make_pretty_json("")
     # return render_template('home.html', supplierdata = json.dumps(suppliers, sort_keys = False, indent = 4, separators = (',', ': ')))
     return render_template('home.html', **locals())
 
 
-# Supplier
-@app.route('/supplier', methods=['POST'])
-def handle_supplier():
+@app.route('/suppliers', methods=['POST'])
+def handle_suppliers():
     """
     This function responds and validates POST calls against
     /<endpoint>
@@ -144,19 +147,18 @@ def handle_supplier():
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
+    # get current endpoint, so we know which part of the schema to use
     endpoint = request.url_rule.rule.lstrip('/')
-    # validate the payload against the relevant schema, returns errorCount together with a validation message
+    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
     errorCount, returnMessage = schema_validate(
         request.json, endpoint)
-    # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
-    # generate the response - if errorCount = 0, the returnMessage contains the original request payload
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-# Account
-@app.route('/account', methods=['POST'])
-def handle_account():
+@app.route('/accounts', methods=['POST'])
+def handle_accounts():
     """
     This function responds and validates POST calls against
     /<endpoint>
@@ -165,13 +167,33 @@ def handle_account():
                     400, if the resources fail validation
                     500, if the schemas fail validation
     """
+    # get current endpoint, so we know which part of the schema to use
     endpoint = request.url_rule.rule.lstrip('/')
-    # validate the payload against the relevant schema, returns errorCount together with a validation message
+    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
     errorCount, returnMessage = schema_validate(
         request.json, endpoint)
-    # get the corresponding HTTP response code based on the number of errors
     responseCode = get_http_code(errorCount)
-    # generate the response - if errorCount = 0, the returnMessage contains the original request payload
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
+
+
+@app.route('/advancedpermissions', methods=['POST'])
+def handle_advancedpermissions():
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
+
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # get current endpoint, so we know which part of the schema to use
+    endpoint = request.url_rule.rule.lstrip('/')
+    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
+    errorCount, returnMessage = schema_validate(
+        request.json, endpoint)
+    responseCode = get_http_code(errorCount)
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
