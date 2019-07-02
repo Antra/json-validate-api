@@ -2,3 +2,4 @@ Flask
 Redis
 Marshmallow
 jsonschema
+openapi2jsonschema

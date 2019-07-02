@@ -6,12 +6,21 @@ import json
 from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaError, validate
 import jsonref
 
+
 # Start getting the needed stuff in place
-# Read the data files to create a basic data store
+# Read some example files to create a basic data store
 with open('data/suppliers.json', 'r') as f:
     suppliers = json.load(f)
 with open('data/accounts.json', 'r') as f:
     accounts = json.load(f)
+
+
+# The let's make a dictionary of the endpoints and the corresponding schema locations
+endpointList = {
+    "account": "AccountEntity",
+    "supplier": "VendorEntity"
+}
+
 
 # Full schema
 # Some preparation work is needed, first generate the full schema from swagger with openapi2jsonschema:
