@@ -31,7 +31,6 @@ with open(schemaFile, 'r') as f:
 # TODO
 # add handling for multiple items in the requests
 # add a way to dump the generated schemas to a file (utilise elsewhere)
-# add rest of relevant endpoints (mainly AccountingDocuments that needs some work)
 
 
 # Start getting the needed stuff in place
