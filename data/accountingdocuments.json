@@ -1,0 +1,10 @@
+{
+  "externalCode": "string",
+  "success": true,
+  "responseMessage": "string",
+  "sourceSystem": "string",
+  "voucherNumber1": "string",
+  "voucherNumber2": "string",
+  "transferDate": "2019-07-03T02:08:55.990Z",
+  "paymentBlock": true
+}

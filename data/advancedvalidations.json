@@ -1,0 +1,33 @@
+  {
+    "interface": "AdvancedValidation",
+    "keyValue": "10012",
+    "dimension1": "string",
+    "dimension1From": "string",
+    "dimension1To": "string",
+    "dimension2": "string",
+    "dimension2From": "string",
+    "dimension2To": "string",
+    "dimension3": "string",
+    "dimension3From": "string",
+    "dimension3To": "string",
+    "dimension4": "string",
+    "dimension4From": "string",
+    "dimension4To": "string",
+    "dimension5": "string",
+    "dimension5From": "string",
+    "dimension5To": "string",
+    "dimension6": "string",
+    "dimension6From": "string",
+    "dimension6To": "string",
+    "dimension7": "string",
+    "dimension7From": "string",
+    "dimension7To": "string",
+    "companies": [
+      {
+        "companyCode": "string",
+        "active": true
+      }
+    ],
+    "externalCode": "4847-31231212-212121-1212",
+    "lastUpdated": "2019-07-03T02:10:58.613Z"
+  }

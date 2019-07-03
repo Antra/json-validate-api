@@ -1,0 +1,32 @@
+  {
+    "taxCode": "B9",
+    "taxCodeNames": [
+      {
+        "translation": "Office supplies",
+        "language": "en-US"
+      }
+    ],
+    "taxPercentage": "10.0000000",
+    "taxPercentage2": "0.0000000",
+    "additionalData": [
+      {
+        "externalCode": "string",
+        "account": "string",
+        "statistical": "string",
+        "transactionType": "string",
+        "taxPercent": 0,
+        "country": "string",
+        "condition": "string",
+        "active": true
+      }
+    ],
+    "companies": [
+      {
+        "companyCode": "string",
+        "inherit": true,
+        "active": true
+      }
+    ],
+    "externalCode": "4847-31231212-212121-1212",
+    "lastUpdated": "2019-07-03T02:18:53.869Z"
+  }

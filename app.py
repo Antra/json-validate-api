@@ -42,6 +42,28 @@ with open('data/accounts.json', 'r') as f:
     accounts = json.load(f)
 with open('data/advancedpermissions.json', 'r') as f:
     advancedpermissions = json.load(f)
+with open('data/accountingdocuments.json', 'r') as f:
+    accountingdocuments = json.load(f)
+with open('data/advancedvalidations.json', 'r') as f:
+    advancedvalidations = json.load(f)
+with open('data/costcenters.json', 'r') as f:
+    costcenters = json.load(f)
+with open('data/exchangerates.json', 'r') as f:
+    exchangerates = json.load(f)
+with open('data/genericlists.json', 'r') as f:
+    genericlists = json.load(f)
+with open('data/matchingorderlines.json', 'r') as f:
+    matchingorderlines = json.load(f)
+with open('data/matchingorders.json', 'r') as f:
+    matchingorders = json.load(f)
+with open('data/paymentterms.json', 'r') as f:
+    paymentterms = json.load(f)
+with open('data/projects.json', 'r') as f:
+    projects = json.load(f)
+with open('data/taxcodes.json', 'r') as f:
+    taxcodes = json.load(f)
+with open('data/users.json', 'r') as f:
+    users = json.load(f)
 
 
 # The let's make a dictionary of the endpoints and the corresponding schema locations
@@ -171,7 +193,17 @@ def index():
     supplierdata = make_pretty_json(suppliers)
     accountdata = make_pretty_json(accounts)
     advancedpermissiondata = make_pretty_json(advancedpermissions)
-    otherdata = make_pretty_json("")
+    accountingdocumentdata = make_pretty_json(accountingdocuments)
+    advancedvalidationdata = make_pretty_json(advancedvalidations)
+    costcenterdata = make_pretty_json(costcenters)
+    exchangeratedata = make_pretty_json(exchangerates)
+    genericlistdata = make_pretty_json(genericlists)
+    matchingorderlinedata = make_pretty_json(matchingorderlines)
+    matchingorderdata = make_pretty_json(matchingorders)
+    paymenttermdata = make_pretty_json(paymentterms)
+    projectdata = make_pretty_json(projects)
+    taxcodedata = make_pretty_json(taxcodes)
+    userdata = make_pretty_json(users)
     # return render_template('home.html', supplierdata = json.dumps(suppliers, sort_keys = False, indent = 4, separators = (',', ': ')))
     return render_template('home.html', **locals())
 

@@ -1,0 +1,61 @@
+  {
+    "firstName": "Amrinder",
+    "surName": "Bhagtana",
+    "uiLanguage": "en-US",
+    "countryCode": "string",
+    "telephone": "501234567",
+    "loginAccount": "BASWARE\\AMRINDERBH",
+    "password": "string",
+    "middleInitial": "S",
+    "email": "abc@basware.com",
+    "costCenterCode": "1000",
+    "validFrom": "2017-01-01",
+    "validUntil": "2018-01-02",
+    "supervisorLoginAccount": "BASWARE\\KARTIK",
+    "personCode": "1002",
+    "title": "Purchase Admin",
+    "loginType": "99",
+    "approvalPasswordUseAllowed": "0",
+    "collaborationSendType": "1",
+    "messageSendType": "1",
+    "groups": [
+      {
+        "externalGroupCode": "string",
+        "active": true
+      }
+    ],
+    "spendingLimits": [
+      {
+        "category": "string",
+        "limit": 0
+      }
+    ],
+    "purchaseManagerUserLocations": {
+      "shipToCode": "string",
+      "shipToName": "string",
+      "billToCode": "string",
+      "billToName": "string",
+      "chargeToCode": "string",
+      "chargeToName": "string"
+    },
+    "purchaseManagerModuleAccess": {
+      "purchasing": true,
+      "travel": true,
+      "spendManager": true,
+      "assets": true,
+      "budgets": true
+    },
+    "purchasingGroups": [
+      {
+        "groupName": "string",
+        "companyCode": "string"
+      }
+    ],
+    "accessRealms": "string",
+    "accessLoginMethod": "string",
+    "accessTimeout": 0,
+    "companyCode": "BW01",
+    "loginAllowed": "0",
+    "externalCode": "4847-31231212-212121-1212",
+    "lastUpdated": "2019-07-03T02:19:43.072Z"
+  }

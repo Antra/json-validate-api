@@ -1,0 +1,25 @@
+ {
+    "costCenterCode": "CCcode1",
+    "costCenterNames": [
+      {
+        "translation": "Office supplies",
+        "language": "en-US"
+      }
+    ],
+    "parents": [
+        {
+            "parentType": "string",
+            "parentCodes": [
+                "string"
+            ]
+        }
+    ],
+    "companies": [
+      {
+        "companyCode": "string",
+        "active": true
+      }
+    ],
+    "externalCode": "4847-31231212-212121-1212",
+    "lastUpdated": "2019-07-03T02:11:25.702Z"
+  }

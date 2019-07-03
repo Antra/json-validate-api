@@ -1,0 +1,20 @@
+  {
+    "projectCode": "PCode1",
+    "projectNames": [
+      {
+        "translation": "Office supplies",
+        "language": "en-US"
+      }
+    ],
+    "description": "Test Project 1",
+    "validFrom": "2017-01-01",
+    "validUntil": "2018-01-01",
+    "companies": [
+      {
+        "companyCode": "string",
+        "active": true
+      }
+    ],
+    "externalCode": "4847-31231212-212121-1212",
+    "lastUpdated": "2019-07-03T02:18:28.918Z"
+  }
