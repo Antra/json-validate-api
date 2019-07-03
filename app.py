@@ -5,11 +5,31 @@ import json
 # import jsonschema
 from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaError, validate
 import jsonref
+import urllib.request
+import subprocess
 
+# Get the swagger file in place
+swaggerUrl = 'https://api.basware.com/swagger/v1/swagger.json'
+tempSwagger = 'temp/swagger.json'
+schemaDir = 'temp'
+schemaFile = schemaDir + '/_definitions.json'
+urllib.request.urlretrieve(swaggerUrl, tempSwagger)
+# and extract the schema from it using openapi2jsonschema
+try:
+    retcode = subprocess.call(
+        "openapi2jsonschema" + " file:" + tempSwagger + " -o " + schemaDir + " --prefix=''", shell=True)
+    if retcode < 0:
+        print("That didn't work ... ", retcode)
+    else:
+        print("That went okay. Proceeding.")
+except OSError as e:
+    print("Execution failed:", e)
+# and then read it
+with open(schemaFile, 'r') as f:
+    autoSchema = jsonref.load(f)
 
 # TODO
 # add handling for multiple items in the requests
-# add a way to generate the schemas at launch (take away the prep work)
 # add a way to dump the generated schemas to a file (utilise elsewhere)
 # add rest of relevant endpoints
 
