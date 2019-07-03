@@ -26,7 +26,7 @@ except OSError as e:
     print("Execution failed:", e)
 # and then read it
 with open(schemaFile, 'r') as f:
-    autoSchema = jsonref.load(f)
+    schema = jsonref.load(f)
 
 # TODO
 # add handling for multiple items in the requests
@@ -57,8 +57,9 @@ endpointList = {
 #  openapi2jsonschema file:swagger.json --prefix=""
 # then load this schema using jsonref to resolve the "$ref"-references
 # lastly, make sure to reference the correct part of the schema in the individual endpoints, e.g. Draft7Validator(schema['definitions']['AccountEntity'])
-with open('schema/schema.json', 'r') as f:
-    schema = jsonref.load(f)
+
+# with open('schema/schema.json', 'r') as f:
+##     schema = jsonref.load(f)
 
 
 # Then make the helper functions
