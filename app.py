@@ -42,8 +42,6 @@ with open('data/accounts.json', 'r') as f:
     accounts = json.load(f)
 with open('data/advancedpermissions.json', 'r') as f:
     advancedpermissions = json.load(f)
-with open('data/accountingdocuments.json', 'r') as f:
-    accountingdocuments = json.load(f)
 with open('data/advancedvalidations.json', 'r') as f:
     advancedvalidations = json.load(f)
 with open('data/costcenters.json', 'r') as f:
@@ -64,24 +62,33 @@ with open('data/taxcodes.json', 'r') as f:
     taxcodes = json.load(f)
 with open('data/users.json', 'r') as f:
     users = json.load(f)
+with open('data/prebookresponses.json', 'r') as f:
+    prebookresponses = json.load(f)
+with open('data/transferresponses.json', 'r') as f:
+    transferresponses = json.load(f)
+with open('data/paymentresponses.json', 'r') as f:
+    paymentresponses = json.load(f)
 
 
 # The let's make a dictionary of the endpoints and the corresponding schema locations
 endpointList = {
     "accounts": "AccountEntity",
     "suppliers": "VendorEntity",
-    "advancedpermissions": "AdvancedPermissionEntity",
-    "accountingdocuments": "AccountingDocumentEntity",
-    "advancedvalidations": "AdvancedValidationEntity",
-    "costcenters": "CostCenterEntity",
-    "exchangerates": "ExchangeRateEntity",
-    "genericlists": "GenericListEntity",
-    "matchingorderlines": "OrderLineEntity",
-    "matchingorders": "OrderEntity",
-    "paymentterms": "PaymentTermEntity",
+    "advancedPermissions": "AdvancedPermissionEntity",
+    "advancedValidations": "AdvancedValidationEntity",
+    "costCenters": "CostCenterEntity",
+    "exchangeRates": "ExchangeRateEntity",
+    "lists": "GenericListEntity",
+    "matchingOrderLines": "OrderLineEntity",
+    "matchingOrders": "OrderEntity",
+    "paymentTerms": "PaymentTermEntity",
     "projects": "ProjectEntity",
-    "taxcodes": "TaxCodeEntity",
-    "users": "UserEntity"
+    "taxCodes": "TaxCodeEntity",
+    "users": "UserEntity",
+    "accountingDocumentstransferResponses": "TransferResponseEntity",
+    "accountingDocumentsacknowledge": "",
+    "accountingDocumentsprebookResponses": "PrebookResponseEntity",
+    "accountingDocumentspaymentResponses": "PaymentResponseEntity"
 }
 
 
@@ -193,7 +200,6 @@ def index():
     supplierdata = make_pretty_json(suppliers)
     accountdata = make_pretty_json(accounts)
     advancedpermissiondata = make_pretty_json(advancedpermissions)
-    accountingdocumentdata = make_pretty_json(accountingdocuments)
     advancedvalidationdata = make_pretty_json(advancedvalidations)
     costcenterdata = make_pretty_json(costcenters)
     exchangeratedata = make_pretty_json(exchangerates)
@@ -204,6 +210,9 @@ def index():
     projectdata = make_pretty_json(projects)
     taxcodedata = make_pretty_json(taxcodes)
     userdata = make_pretty_json(users)
+    transferresponsedata = make_pretty_json(transferresponses)
+    prebookresponsedata = make_pretty_json(prebookresponses)
+    paymentresponsedata = make_pretty_json(paymentresponses)
     # return render_template('home.html', supplierdata = json.dumps(suppliers, sort_keys = False, indent = 4, separators = (',', ': ')))
     return render_template('home.html', **locals())
 
@@ -248,7 +257,7 @@ def handle_accounts():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/advancedpermissions', methods=['POST'])
+@app.route('/advancedPermissions', methods=['POST'])
 def handle_advancedpermissions():
     """
     This function responds and validates POST calls against
@@ -268,27 +277,7 @@ def handle_advancedpermissions():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/accountingdocuments', methods=['POST'])
-def handle_accountingdocuments():
-    """
-    This function responds and validates POST calls against
-    /<endpoint>
-
-    :return:        201, if the resources passed validation
-                    400, if the resources fail validation
-                    500, if the schemas fail validation
-    """
-    # get current endpoint, so we know which part of the schema to use
-    endpoint = request.url_rule.rule.lstrip('/')
-    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
-    errorCount, returnMessage = schema_validate(
-        request.json, endpoint)
-    responseCode = get_http_code(errorCount)
-    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
-    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
-
-
-@app.route('/advancedvalidations', methods=['POST'])
+@app.route('/advancedValidations', methods=['POST'])
 def handle_advancedvalidations():
     """
     This function responds and validates POST calls against
@@ -308,7 +297,7 @@ def handle_advancedvalidations():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/costcenters', methods=['POST'])
+@app.route('/costCenters', methods=['POST'])
 def handle_costcenters():
     """
     This function responds and validates POST calls against
@@ -328,7 +317,7 @@ def handle_costcenters():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/exchangerates', methods=['POST'])
+@app.route('/exchangeRates', methods=['POST'])
 def handle_exchangerates():
     """
     This function responds and validates POST calls against
@@ -348,8 +337,8 @@ def handle_exchangerates():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/genericlists', methods=['POST'])
-def handle_genericlists():
+@app.route('/lists', methods=['POST'])
+def handle_lists():
     """
     This function responds and validates POST calls against
     /<endpoint>
@@ -368,7 +357,7 @@ def handle_genericlists():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/matchingorderlines', methods=['POST'])
+@app.route('/matchingOrderLines', methods=['POST'])
 def handle_matchingorderlines():
     """
     This function responds and validates POST calls against
@@ -388,7 +377,7 @@ def handle_matchingorderlines():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/matchingorders', methods=['POST'])
+@app.route('/matchingOrders', methods=['POST'])
 def handle_matchingorders():
     """
     This function responds and validates POST calls against
@@ -408,7 +397,7 @@ def handle_matchingorders():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/paymentterms', methods=['POST'])
+@app.route('/paymentTerms', methods=['POST'])
 def handle_paymentterms():
     """
     This function responds and validates POST calls against
@@ -448,7 +437,7 @@ def handle_projects():
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
 
 
-@app.route('/taxcodes', methods=['POST'])
+@app.route('/taxCodes', methods=['POST'])
 def handle_taxcodes():
     """
     This function responds and validates POST calls against
@@ -486,6 +475,85 @@ def handle_users():
     responseCode = get_http_code(errorCount)
     # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
     return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
+
+
+# Accounting Document group
+@app.route('/accountingDocuments/<string:document_id>/transferResponses', methods=['POST'])
+def handle_accountingdocuments_transferresponses(document_id):
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
+
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # get current endpoint, so we know which part of the schema to use
+    endpoint = request.url_rule.rule.lstrip(
+        '/').replace('/<string:document_id>/', '')
+    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
+    errorCount, returnMessage = schema_validate(
+        request.json, endpoint)
+    responseCode = get_http_code(errorCount)
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
+
+
+@app.route('/accountingDocuments/<string:document_id>/prebookResponses', methods=['POST'])
+def handle_accountingdocuments_prebookresponses(document_id):
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
+
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # get current endpoint, so we know which part of the schema to use
+    endpoint = request.url_rule.rule.lstrip(
+        '/').replace('/<string:document_id>/', '')
+    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
+    errorCount, returnMessage = schema_validate(
+        request.json, endpoint)
+    responseCode = get_http_code(errorCount)
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
+
+
+@app.route('/accountingDocuments/<string:document_id>/paymentResponses', methods=['POST'])
+def handle_accountingdocuments_paymentResponses(document_id):
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
+
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # get current endpoint, so we know which part of the schema to use
+    endpoint = request.url_rule.rule.lstrip(
+        '/').replace('/<string:document_id>/', '')
+    # validate the payload against the relevant schema part, then use the errorCount to get the corresponding HTTP response code
+    errorCount, returnMessage = schema_validate(
+        request.json, endpoint)
+    responseCode = get_http_code(errorCount)
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': errorCount, 'response': returnMessage}), responseCode
+
+
+@app.route('/accountingDocuments/<string:document_id>/acknowledge', methods=['POST'])
+def handle_accountingdocuments_acknowledge(document_id):
+    """
+    This function responds and validates POST calls against
+    /<endpoint>
+
+    :return:        201, if the resources passed validation
+                    400, if the resources fail validation
+                    500, if the schemas fail validation
+    """
+    # this endpoint is different from the others and does not take a payload, thus there's nothing to validate.
+    # lastly, serve the HTTP response - if errorCount = 0, the returnMessage contains the original request payload
+    return jsonify({'validation_errors': 0, 'response': 'this endpoint takes no payload, so there is nothing to validate'}), 200
 
 
 if __name__ == '__main__':

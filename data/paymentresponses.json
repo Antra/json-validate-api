@@ -1,0 +1,17 @@
+{
+  "externalCode": "string",
+  "success": true,
+  "responseMessage": "string",
+  "sourceSystem": "string",
+  "paymentDate": "2019-07-03T04:57:34.596Z",
+  "paymentTermCode": "string",
+  "paymentBlock": true,
+  "paymentMethod": "string",
+  "paidTotal": 0,
+  "cashDiscount": 0,
+  "checkNumber": "string",
+  "paymentMessage": "string",
+  "paymentNumber": "string",
+  "paymentDocument": "string",
+  "paymentReversalDocument": "string"
+}
