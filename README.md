@@ -1,5 +1,5 @@
 # JSON schema validation service
-A Python API that serves as a JSON schema validation service
+A basic Python API that serves as a JSON schema validation service
 
 ## Getting started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -50,7 +50,6 @@ docker run -p 4000:80 validator
 ## Built with
 * [Python](https://www.python.org/downloads/) - The application language
 * [Flask](http://flask.pocoo.org/) - HTTP framework used
-* [Marshmallow](https://marshmallow.readthedocs.io/en/3.0/) - Schema framework used
 * [Docker](https://www.docker.com/) - Used to generate the images
 * [Azure](https://azure.microsoft.com) - Used to run the Docker containers
 
@@ -63,7 +62,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 * **Anders Demant van der Weide** - *Initial work* - [Antra](https://github.com/antra)
 
-See also the list of [contributors](https://github.com/Antra/utdapi/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Antra/json-validate-api/contributors) who participated in this project.
 
 ## Licensing
 This project is licensed under the GNU General Public License v3 - see the [LICENSE.md](LICENSE.md) file for details

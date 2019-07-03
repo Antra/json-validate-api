@@ -7,6 +7,12 @@ from jsonschema import Draft7Validator, FormatChecker, ValidationError, SchemaEr
 import jsonref
 
 
+# TODO
+# add handling for multiple items in the requests
+# add a way to generate the schemas at launch (take away the prep work)
+# add a way to dump the generated schemas to a file (utilise elsewhere)
+
+
 # Start getting the needed stuff in place
 # Read some example files to create a basic data store
 with open('data/suppliers.json', 'r') as f:
