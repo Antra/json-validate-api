@@ -11,6 +11,7 @@ import jsonref
 # add handling for multiple items in the requests
 # add a way to generate the schemas at launch (take away the prep work)
 # add a way to dump the generated schemas to a file (utilise elsewhere)
+# add rest of relevant endpoints
 
 
 # Start getting the needed stuff in place
