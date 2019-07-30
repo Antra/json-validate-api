@@ -19,14 +19,19 @@ try:
     retcode = subprocess.call(
         "openapi2jsonschema" + " file:" + tempSwagger + " -o " + schemaDir + " --prefix=''", shell=True)
     if retcode < 0:
-        print("That didn't work ... ", retcode)
+        print("openapi2jsonschema execution failed ... ", retcode)
     else:
-        print("That went okay. Proceeding.")
+        print("openapi2jsonschema execution successful.")
 except OSError as e:
-    print("Execution failed:", e)
+    print("openapi2jsonschema execution failed:", e)
 # and then read it
-with open(schemaFile, 'r') as f:
-    schema = jsonref.load(f)
+try:
+    with open(schemaFile, 'r') as f:
+        schema = jsonref.load(f)
+except FileNotFoundError as e:
+    with open('schema/schema.json', 'r') as f:
+        schema = jsonref.load(f)
+
 
 # TODO
 # add handling for multiple items in the requests
